@@ -1,8 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import HeroCard from "./HeroCard";
+import Comparison from "./Comparison";
 
-export type dataRow = {
+export type DataRow = {
   hero: string;
   rating: string;
   averagePlace: number;
@@ -12,7 +13,7 @@ export type dataRow = {
 };
 
 const Data = () => {
-  const [data, setData] = useState<dataRow[]>([]);
+  const [data, setData] = useState<DataRow[]>([]);
 
   useEffect(() => {
     const csvFileName = "spreadsheet.csv";
@@ -25,13 +26,13 @@ const Data = () => {
     fetchFileData();
   }, []);
 
-  function parseCSV(csvData: string): dataRow[] {
+  function parseCSV(csvData: string): DataRow[] {
     const lines: string[] = csvData.split("\n");
-    const dataRows: dataRow[] = [];
+    const dataRows: DataRow[] = [];
 
     for (let i = 1; i < lines.length; i++) {
       const values: string[] = lines[i].split(",");
-      const dataObject: dataRow = {
+      const dataObject: DataRow = {
         hero: values[0],
         rating: values[1],
         averagePlace: parseFloat(values[2]),
@@ -47,13 +48,16 @@ const Data = () => {
   }
 
   return (
-    <div id="dataContainer" className="flex">
-      <div className="grid grid-cols-2 p-4 mx-auto gap-x-10 gap-y-2">
-        {data.map((row: dataRow) => (
-          <HeroCard key={row.hero} row={row} />
-        ))}
+    <>
+      <Comparison heroData={data} />
+      <div id="dataContainer" className="flex">
+        <div className="grid grid-cols-2 p-4 mx-auto gap-x-10 gap-y-2">
+          {data.map((row: DataRow) => (
+            <HeroCard key={row.hero} row={row} />
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
